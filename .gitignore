@@ -1,0 +1,19 @@
+# Firebase
+.firebase/
+*-debug.log
+backend/functions/.env.local
+backend/functions/.env*.local
+backend/functions/lib/
+backend/functions/node_modules/
+
+# Flutter
+app/.dart_tool/
+app/build/
+app/.flutter-plugins
+app/.flutter-plugins-dependencies
+app/.packages
+
+# Keys
+*.keystore
+google-services.json
+GoogleService-Info.plist

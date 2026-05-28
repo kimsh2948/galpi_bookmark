@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>문장 수집가 — 디자인 미리보기</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Noto Sans KR', sans-serif; background: #1a1a1a; color: #eee; }
+
+  .page-title {
+    text-align: center;
+    padding: 48px 24px 16px;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 22px;
+    color: #ccc;
+    letter-spacing: 0.05em;
+  }
+  .page-sub {
+    text-align: center;
+    padding-bottom: 48px;
+    font-size: 13px;
+    color: #666;
+  }
+
+  .concepts {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    padding: 0 40px 80px;
+    flex-wrap: wrap;
+  }
+
+  .concept {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 320px;
+  }
+
+  .concept-label {
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #555;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #333;
+  }
+  .concept-title {
+    text-align: center;
+    font-size: 15px;
+    color: #aaa;
+    font-family: 'Noto Serif KR', serif;
+  }
+
+  /* ───────────────────────────── A: 타이포 에디토리얼 ───────────────────────────── */
+  .phone {
+    width: 320px;
+    height: 580px;
+    border-radius: 36px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+  }
+
+  /* A: Editorial */
+  .phone-a { background: #FAF8F4; }
+
+  .a-statusbar {
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+  }
+  .a-statusbar span { font-size: 11px; color: #999; }
+
+  .a-header {
+    padding: 4px 28px 20px;
+    border-bottom: 1px solid #E8E2D8;
+  }
+  .a-header-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 13px;
+    color: #B8A898;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+  .a-header-name {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #2A2520;
+  }
+
+  .a-feed { padding: 0; overflow: hidden; }
+
+  .a-card {
+    padding: 24px 28px;
+    border-bottom: 1px solid #EDE8DF;
+    background: #FAF8F4;
+    position: relative;
+  }
+  .a-card-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: 52px;
+    color: #E8DDD0;
+    line-height: 1;
+    position: absolute;
+    top: 12px;
+    left: 22px;
+  }
+  .a-card-text {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 14px;
+    line-height: 1.8;
+    color: #3A342E;
+    padding-top: 20px;
+    padding-left: 4px;
+  }
+  .a-card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 14px;
+  }
+  .a-card-book {
+    font-size: 11px;
+    color: #A8998A;
+    letter-spacing: 0.05em;
+  }
+  .a-card-book span {
+    display: block;
+    font-size: 10px;
+    color: #C8BDB0;
+    margin-top: 1px;
+  }
+  .a-card-like {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: #C8A898;
+  }
+
+  .a-card-featured {
+    background: #2A2520;
+    padding: 28px 28px;
+    position: relative;
+  }
+  .a-card-featured .a-card-quote { color: #3D3630; top: 14px; }
+  .a-card-featured .a-card-text {
+    color: #F0EAE0;
+    font-size: 15px;
+    line-height: 1.9;
+  }
+  .a-card-featured .a-card-book { color: #8A7E74; }
+  .a-card-featured .a-card-book span { color: #6A5E54; }
+  .a-card-featured .a-card-like { color: #C8A898; }
+
+  .a-tabbar {
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    height: 72px;
+    background: #FAF8F4;
+    border-top: 1px solid #E8E2D8;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding-bottom: 12px;
+  }
+  .a-tab { text-align: center; }
+  .a-tab-icon { font-size: 20px; }
+  .a-tab-label { font-size: 9px; color: #B8A898; margin-top: 2px; }
+  .a-tab.active .a-tab-icon { color: #8B5E3C; }
+  .a-tab.active .a-tab-label { color: #8B5E3C; font-weight: 500; }
+
+  /* B: Minimal Mono */
+  .phone-b { background: #F7F7F5; }
+
+  .b-statusbar {
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+  }
+  .b-statusbar span { font-size: 11px; color: #999; }
+
+  .b-header {
+    padding: 0 24px 16px;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .b-header-title {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #111;
+    letter-spacing: -0.02em;
+  }
+  .b-header-count {
+    font-size: 13px;
+    color: #999;
+  }
+
+  .b-divider { height: 1px; background: #E8E8E6; margin: 0 24px; }
+
+  .b-card {
+    padding: 20px 24px;
+    border-bottom: 1px solid #EBEBEA;
+  }
+  .b-card-text {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 14px;
+    line-height: 1.75;
+    color: #222;
+    font-weight: 300;
+  }
+  .b-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+  .b-card-book {
+    font-size: 11px;
+    color: #888;
+  }
+  .b-like {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: #bbb;
+  }
+  .b-like.active { color: #E05A4E; }
+
+  .b-card-highlight {
+    background: #111;
+    margin: 0;
+    padding: 24px 24px;
+    border-bottom: 1px solid #222;
+  }
+  .b-card-highlight .b-card-text { color: #F0F0EE; font-size: 15px; }
+  .b-card-highlight .b-card-book { color: #666; }
+  .b-card-highlight .b-like { color: #555; }
+  .b-card-highlight .b-like.active { color: #E05A4E; }
+
+  .b-tabbar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 72px;
+    background: #F7F7F5;
+    border-top: 1px solid #E8E8E6;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding-bottom: 12px;
+  }
+  .b-tab { text-align: center; }
+  .b-tab-icon { font-size: 20px; color: #CCC; }
+  .b-tab-label { font-size: 9px; color: #CCC; margin-top: 2px; }
+  .b-tab.active .b-tab-icon { color: #111; }
+  .b-tab.active .b-tab-label { color: #111; }
+
+  .b-fab {
+    position: absolute;
+    bottom: 84px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    background: #111;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  }
+
+  /* C: Vintage Magazine */
+  .phone-c { background: #F2EDE4; }
+
+  .c-statusbar {
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+  }
+  .c-statusbar span { font-size: 11px; color: #999; font-family: 'Noto Serif KR'; }
+
+  .c-header {
+    padding: 0 24px 12px;
+    border-bottom: 2px solid #2A2520;
+  }
+  .c-header-num {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 10px;
+    color: #9A8878;
+    letter-spacing: 0.1em;
+    margin-bottom: 2px;
+  }
+  .c-header-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #2A2520;
+    letter-spacing: 0.02em;
+  }
+
+  .c-section-label {
+    padding: 12px 24px 8px;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #9A8878;
+  }
+
+  .c-card {
+    margin: 0 16px 10px;
+    background: #FBF7F0;
+    border: 1px solid #DDD5C4;
+    padding: 16px 18px;
+    position: relative;
+  }
+  .c-card-num {
+    position: absolute;
+    top: -1px;
+    right: 12px;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 9px;
+    color: #BFB4A4;
+    letter-spacing: 0.05em;
+  }
+  .c-card-text {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 13px;
+    line-height: 1.85;
+    color: #2A2520;
+  }
+  .c-card-rule { height: 1px; background: #DDD5C4; margin: 10px 0; }
+  .c-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .c-card-book {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 10px;
+    color: #9A8878;
+    font-style: italic;
+  }
+  .c-card-book b { font-style: normal; font-weight: 600; color: #5A4E44; }
+  .c-like {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 10px;
+    color: #BFB4A4;
+    font-family: 'Noto Serif KR';
+  }
+  .c-like.active { color: #C45C3A; }
+
+  .c-card-featured {
+    margin: 0 0 10px;
+    background: #2A2520;
+    padding: 20px 24px;
+    position: relative;
+  }
+  .c-card-featured .c-card-num { color: #4A403A; }
+  .c-card-featured .c-card-text { color: #EDE8DF; }
+  .c-card-featured .c-card-rule { background: #4A403A; }
+  .c-card-featured .c-card-book { color: #7A6E64; }
+  .c-card-featured .c-card-book b { color: #AFA49A; }
+  .c-card-featured .c-like { color: #5A504A; }
+  .c-card-featured .c-like.active { color: #C45C3A; }
+
+  .c-tabbar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 72px;
+    background: #F2EDE4;
+    border-top: 2px solid #2A2520;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding-bottom: 12px;
+  }
+  .c-tab { text-align: center; }
+  .c-tab-icon { font-size: 18px; color: #BFB4A4; }
+  .c-tab-label {
+    font-size: 8px;
+    color: #BFB4A4;
+    margin-top: 2px;
+    font-family: 'Noto Serif KR';
+    letter-spacing: 0.05em;
+  }
+  .c-tab.active .c-tab-icon { color: #C45C3A; }
+  .c-tab.active .c-tab-label { color: #C45C3A; }
+
+  /* color palettes */
+  .palette { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+  .swatch {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.1);
+    position: relative;
+  }
+  .swatch-label {
+    position: absolute;
+    bottom: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 8px;
+    color: #555;
+    white-space: nowrap;
+  }
+  .palette-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 0 24px;
+    flex-wrap: wrap;
+  }
+
+  .info-box {
+    background: #222;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 12px;
+    line-height: 1.7;
+    color: #888;
+  }
+  .info-box strong { color: #ccc; }
+</style>
+</head>
+<body>
+
+<div class="page-title">문장 수집가 — 디자인 방향 미리보기</div>
+<div class="page-sub">3가지 감성 중 하나를 골라주세요. design.md에 반영합니다.</div>
+
+<div class="concepts">
+
+  <!-- ───── A: Editorial ───── -->
+  <div class="concept">
+    <div class="concept-label">Option A</div>
+    <div class="concept-title">타이포그래피 에디토리얼</div>
+
+    <div class="phone phone-a">
+      <div class="a-statusbar">
+        <span>9:41</span><span>●●●</span>
+      </div>
+      <div class="a-header">
+        <div class="a-header-title">광장</div>
+        <div class="a-header-name">오늘의 문장</div>
+      </div>
+      <div class="a-feed">
+        <div class="a-card a-card-featured">
+          <div class="a-card-quote">"</div>
+          <div class="a-card-text">삶이란 결국 선택의 연속이며, 그 선택들이 모여 우리가 된다.</div>
+          <div class="a-card-meta">
+            <div class="a-card-book">
+              채식주의자
+              <span>한강 · 2007</span>
+            </div>
+            <div class="a-card-like">♡ 24</div>
+          </div>
+        </div>
+        <div class="a-card">
+          <div class="a-card-quote">"</div>
+          <div class="a-card-text">기억은 선택적이다. 우리는 기억하고 싶은 것만 기억한다.</div>
+          <div class="a-card-meta">
+            <div class="a-card-book">
+              82년생 김지영
+              <span>조남주 · 2016</span>
+            </div>
+            <div class="a-card-like">♡ 8</div>
+          </div>
+        </div>
+        <div class="a-card">
+          <div class="a-card-quote">"</div>
+          <div class="a-card-text">언어는 존재의 집이다.</div>
+          <div class="a-card-meta">
+            <div class="a-card-book">
+              존재와 시간
+              <span>하이데거</span>
+            </div>
+            <div class="a-card-like" style="color:#C8A898">♥ 41</div>
+          </div>
+        </div>
+      </div>
+      <div class="a-tabbar">
+        <div class="a-tab">
+          <div class="a-tab-icon">📚</div>
+          <div class="a-tab-label">내 서재</div>
+        </div>
+        <div class="a-tab active">
+          <div class="a-tab-icon" style="color:#8B5E3C">🌐</div>
+          <div class="a-tab-label">광장</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="palette-row">
+      <div style="position:relative;margin-right:4px">
+        <div class="swatch" style="background:#FAF8F4;border-color:#444"></div>
+      </div>
+      <div class="swatch" style="background:#2A2520"></div>
+      <div class="swatch" style="background:#8B5E3C"></div>
+      <div class="swatch" style="background:#3A342E"></div>
+      <div class="swatch" style="background:#C8A898"></div>
+    </div>
+
+    <div class="info-box">
+      <strong>특징:</strong> 큰 따옴표가 시각적 요소. 세리프 폰트 중심. 다크 카드로 강조.<br>
+      <strong>느낌:</strong> 문학잡지, Readwise, 브런치 스토리
+    </div>
+  </div>
+
+  <!-- ───── B: Minimal Mono ───── -->
+  <div class="concept">
+    <div class="concept-label">Option B</div>
+    <div class="concept-title">미니멀 모노크롬</div>
+
+    <div class="phone phone-b">
+      <div class="b-statusbar">
+        <span>9:41</span><span>●●●</span>
+      </div>
+      <div class="b-header">
+        <div class="b-header-title">광장</div>
+        <div class="b-header-count">문장 128개</div>
+      </div>
+      <div class="b-divider"></div>
+      <div class="b-card b-card-highlight">
+        <div class="b-card-text">삶이란 결국 선택의 연속이며, 그 선택들이 모여 우리가 된다.</div>
+        <div class="b-card-footer">
+          <div class="b-card-book">채식주의자 · 한강</div>
+          <div class="b-like active">♥ 24</div>
+        </div>
+      </div>
+      <div class="b-card">
+        <div class="b-card-text">기억은 선택적이다. 우리는 기억하고 싶은 것만 기억한다.</div>
+        <div class="b-card-footer">
+          <div class="b-card-book">82년생 김지영 · 조남주</div>
+          <div class="b-like">♡ 8</div>
+        </div>
+      </div>
+      <div class="b-card">
+        <div class="b-card-text">언어는 존재의 집이다.</div>
+        <div class="b-card-footer">
+          <div class="b-card-book">존재와 시간 · 하이데거</div>
+          <div class="b-like">♡ 41</div>
+        </div>
+      </div>
+      <div class="b-fab">✏</div>
+      <div class="b-tabbar">
+        <div class="b-tab">
+          <div class="b-tab-icon">📚</div>
+          <div class="b-tab-label">내 서재</div>
+        </div>
+        <div class="b-tab active">
+          <div class="b-tab-icon">🌐</div>
+          <div class="b-tab-label">광장</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="palette-row">
+      <div class="swatch" style="background:#F7F7F5;border-color:#444"></div>
+      <div class="swatch" style="background:#111111"></div>
+      <div class="swatch" style="background:#E05A4E"></div>
+      <div class="swatch" style="background:#888888"></div>
+      <div class="swatch" style="background:#EBEBEA;border-color:#444"></div>
+    </div>
+
+    <div class="info-box">
+      <strong>특징:</strong> UI 크롬 최소화. 좋아요만 레드 포인트. 산세리프 라이트 웨이트.<br>
+      <strong>느낌:</strong> Mymind, Linear, 고급 뉴스레터 앱
+    </div>
+  </div>
+
+  <!-- ───── C: Vintage ───── -->
+  <div class="concept">
+    <div class="concept-label">Option C</div>
+    <div class="concept-title">빈티지 매거진</div>
+
+    <div class="phone phone-c">
+      <div class="c-statusbar">
+        <span>9:41</span><span>●●●</span>
+      </div>
+      <div class="c-header">
+        <div class="c-header-num">Vol.003 · 광장</div>
+        <div class="c-header-title">문장 수집가</div>
+      </div>
+      <div class="c-section-label">오늘의 문장 · Today's Picks</div>
+
+      <div class="c-card-featured">
+        <div class="c-card-num">No.001</div>
+        <div class="c-card-text">삶이란 결국 선택의 연속이며, 그 선택들이 모여 우리가 된다.</div>
+        <div class="c-card-rule"></div>
+        <div class="c-card-footer">
+          <div class="c-card-book"><b>채식주의자</b> · 한강</div>
+          <div class="c-like active">♥ 24</div>
+        </div>
+      </div>
+
+      <div class="c-card">
+        <div class="c-card-num">No.002</div>
+        <div class="c-card-text">기억은 선택적이다. 우리는 기억하고 싶은 것만 기억한다.</div>
+        <div class="c-card-rule"></div>
+        <div class="c-card-footer">
+          <div class="c-card-book"><b>82년생 김지영</b> · 조남주</div>
+          <div class="c-like">♡ 8</div>
+        </div>
+      </div>
+
+      <div class="c-card">
+        <div class="c-card-num">No.003</div>
+        <div class="c-card-text">언어는 존재의 집이다.</div>
+        <div class="c-card-rule"></div>
+        <div class="c-card-footer">
+          <div class="c-card-book"><b>존재와 시간</b> · 하이데거</div>
+          <div class="c-like">♡ 41</div>
+        </div>
+      </div>
+
+      <div class="c-tabbar">
+        <div class="c-tab">
+          <div class="c-tab-icon">📚</div>
+          <div class="c-tab-label">내 서재</div>
+        </div>
+        <div class="c-tab active">
+          <div class="c-tab-icon">🌐</div>
+          <div class="c-tab-label">광장</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="palette-row">
+      <div class="swatch" style="background:#F2EDE4;border-color:#555"></div>
+      <div class="swatch" style="background:#2A2520"></div>
+      <div class="swatch" style="background:#C45C3A"></div>
+      <div class="swatch" style="background:#9A8878"></div>
+      <div class="swatch" style="background:#FBF7F0;border-color:#555"></div>
+    </div>
+
+    <div class="info-box">
+      <strong>특징:</strong> 호수번호(No.XXX) 넘버링, 두꺼운 테두리선, 잡지 레이아웃.<br>
+      <strong>느낌:</strong> 오래된 문학잡지, 독립출판물, 아날로그 감성
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
