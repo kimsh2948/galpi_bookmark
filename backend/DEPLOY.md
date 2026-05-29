@@ -16,7 +16,7 @@
 | Firestore 복합 인덱스 | ✅ 완료 | isPublic + createdAt |
 | KAKAO_REST_API_KEY Secret 등록 | ✅ 완료 | Secret Manager v1 |
 | Functions 빌드 (TypeScript → JS) | ✅ 완료 | `backend/functions/lib/` |
-| Functions 배포 | ❌ 실패 | IAM 권한 문제 (아래 참고) |
+| Functions 배포 | ✅ 완료 | kakaoCustomToken, searchBooks |
 
 ---
 

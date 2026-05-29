@@ -17,3 +17,4 @@ app/.packages
 *.keystore
 google-services.json
 GoogleService-Info.plist
+.claude/

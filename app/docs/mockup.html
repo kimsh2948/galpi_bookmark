@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>갈피 — 앱 목업</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700&family=Noto+Sans+KR:wght@400;500&family=Playfair+Display:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FBF8F6;
+    --surface: #F7F2ED;
+    --featured: #2E2824;
+    --text-primary: #3D3530;
+    --text-secondary: #7D7068;
+    --text-hint: #B09888;
+    --accent: #A86B52;
+    --like-active: #D4907A;
+    --divider: #EDE6DC;
+    --inverted-text: #F2ECE4;
+    --inverted-secondary: #8C8078;
+    --quote-deco: #F2C4B4;
+    --inactive: #CEC1B8;
+    --skeleton-base: #EDE8DF;
+    --skeleton-highlight: #F7F2ED;
+    --blush: #F0C8BC;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #EAE5E0;
+    font-family: 'Noto Serif KR', serif;
+    padding: 48px 32px;
+    min-height: 100vh;
+  }
+
+  h1.page-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: #9A8E84;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .screens-row {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 64px;
+  }
+
+  .screen-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .screen-label {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    color: #9A8E84;
+    letter-spacing: 0.08em;
+    background: rgba(255,255,255,0.5);
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+
+  /* ─── Phone frame ─── */
+  .phone {
+    width: 375px;
+    height: 780px;
+    background: var(--bg);
+    border-radius: 44px;
+    overflow: hidden;
+    position: relative;
+    box-shadow:
+      0 0 0 1px rgba(0,0,0,0.06),
+      0 24px 64px rgba(46,40,36,0.16),
+      0 4px 16px rgba(46,40,36,0.06);
+  }
+
+  /* ─── Status bar ─── */
+  .status-bar {
+    height: 44px;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 26px;
+    flex-shrink: 0;
+  }
+  .status-time {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+  .status-icons {
+    font-size: 11px;
+    color: var(--text-primary);
+    letter-spacing: 2px;
+  }
+
+  /* ─── AppBar ─── */
+  .appbar {
+    background: var(--bg);
+    border-bottom: 1px solid var(--divider);
+    padding: 10px 28px 14px;
+    flex-shrink: 0;
+  }
+  .appbar-sub {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 10px;
+    color: var(--text-hint);
+    letter-spacing: 0.14em;
+    margin-bottom: 2px;
+  }
+  .appbar-sub::before {
+    content: "· ";
+    color: var(--blush);
+    font-size: 13px;
+    margin-right: 1px;
+  }
+  .appbar-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.2;
+  }
+  .appbar-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .appbar-action {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .appbar-close {
+    font-size: 20px;
+    color: var(--text-primary);
+    line-height: 1;
+  }
+
+  /* ─── Screen body ─── */
+  .screen-body {
+    flex: 1;
+    overflow: hidden;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    height: calc(780px - 44px);
+  }
+
+  .scroll-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+  }
+  .scroll-content::-webkit-scrollbar { display: none; }
+
+  /* ─── BottomNav ─── */
+  .bottom-nav {
+    height: 72px;
+    background: var(--bg);
+    border-top: 1px solid var(--divider);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-shrink: 0;
+  }
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    flex: 1;
+  }
+  .nav-icon { font-size: 22px; color: var(--inactive); }
+  .nav-icon.active { color: var(--accent); }
+  .nav-label {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 9px;
+    color: var(--inactive);
+    letter-spacing: 0.05em;
+  }
+  .nav-label.active { color: var(--accent); }
+
+  /* ─── FAB ─── */
+  .fab {
+    position: absolute;
+    bottom: 84px;
+    right: 20px;
+    width: 52px;
+    height: 52px;
+    background: var(--featured);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 20px rgba(46,40,36,0.32);
+  }
+  .fab-icon { font-size: 20px; color: var(--inverted-text); }
+
+  /* ─── Sentence Card ─── */
+  .sentence-card {
+    padding: 24px 28px;
+    border-bottom: 1px solid var(--divider);
+    position: relative;
+    background: var(--bg);
+    transition: background 0.12s;
+  }
+  .sentence-card:hover { background: #F7F2EE; }
+  .sentence-card.featured { background: var(--featured); }
+  .sentence-card.featured:hover { background: #352E2A; }
+
+  .quote-deco {
+    font-family: 'Playfair Display', serif;
+    font-size: 56px;
+    font-weight: 400;
+    color: var(--quote-deco);
+    line-height: 0.7;
+    position: absolute;
+    top: 16px;
+    left: 24px;
+    user-select: none;
+    pointer-events: none;
+  }
+  .quote-deco.dark { color: #4A3C36; }
+
+  .card-text {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text-primary);
+    line-height: 1.9;
+    padding-top: 22px;
+    position: relative;
+    z-index: 1;
+  }
+  .card-text.featured-text {
+    color: var(--inverted-text);
+    font-size: 15px;
+    line-height: 1.95;
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-top: 14px;
+  }
+  .card-book-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-hint);
+  }
+  .card-book-title.dark { color: var(--inverted-secondary); }
+  .card-book-author {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 10px;
+    color: var(--text-hint);
+    margin-top: 1px;
+    opacity: 0.8;
+  }
+  .card-book-author.dark { color: #6E6258; }
+
+  .card-like {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 11px;
+    color: var(--inactive);
+  }
+  .card-like.active { color: var(--like-active); }
+  .card-like.dark-inactive { color: #6E6258; }
+  .like-heart {
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+  }
+  /* SVG heart inline */
+  .heart-empty::before { content: "♡"; font-size: 13px; }
+  .heart-full::before  { content: "♥"; font-size: 13px; }
+
+  /* ─── Section count pill ─── */
+  .section-count {
+    padding: 14px 28px 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .section-count-pill {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--accent);
+    background: rgba(168,107,82,0.1);
+    border-radius: 20px;
+    padding: 3px 9px;
+    letter-spacing: 0.02em;
+  }
+
+  /* ─── LOGIN SCREEN ─── */
+  .login-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 0 40px;
+    background: var(--bg);
+  }
+  .login-bookmark {
+    margin-bottom: 20px;
+  }
+  .login-appname {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 38px;
+    font-weight: 700;
+    color: var(--featured);
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+    position: relative;
+  }
+  .login-appname-deco {
+    width: 28px;
+    height: 2px;
+    background: var(--blush);
+    border-radius: 2px;
+    margin: 0 auto 10px;
+  }
+  .login-tagline {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--text-hint);
+    margin-bottom: 56px;
+  }
+  .login-social-label {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--inactive);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .kakao-btn {
+    width: 100%;
+    height: 52px;
+    background: #FEE500;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(254,229,0,0.4);
+  }
+  .kakao-logo {
+    width: 22px;
+    height: 22px;
+    background: #191919;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: #FEE500;
+    font-weight: 700;
+  }
+  .kakao-text {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #191919;
+  }
+
+  /* ─── WRITE SCREEN ─── */
+  .write-content {
+    padding: 20px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .input-field {
+    border: none;
+    border-bottom: 1px solid var(--divider);
+    background: transparent;
+    padding: 6px 0 10px;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px;
+    color: var(--text-primary);
+    width: 100%;
+    outline: none;
+  }
+  .input-field.active-border {
+    border-bottom: 1.5px solid var(--accent);
+  }
+
+  .book-selected-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+  }
+  .book-thumbnail {
+    width: 28px;
+    height: 38px;
+    border-radius: 4px;
+    background: var(--skeleton-base);
+    flex-shrink: 0;
+  }
+  .book-title-mini {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .book-author-mini {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 11px;
+    color: var(--text-hint);
+    margin-top: 2px;
+  }
+
+  .camera-zone {
+    height: 110px;
+    border: 1.5px dashed var(--inactive);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .camera-zone:hover { border-color: var(--accent); }
+  .camera-icon { font-size: 26px; color: var(--inactive); }
+  .camera-hint {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--inactive);
+  }
+
+  .ocr-zone {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 14px 16px;
+  }
+  .ocr-label {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 11px;
+    font-style: italic;
+    color: var(--text-hint);
+    margin-bottom: 10px;
+  }
+  .ocr-text {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 14px;
+    color: var(--text-primary);
+    line-height: 1.9;
+    cursor: text;
+  }
+  .ocr-selected {
+    background: rgba(168,107,82,0.18);
+    border-radius: 3px;
+    padding: 1px 0;
+  }
+  .ocr-toolbar {
+    margin-top: 10px;
+    display: inline-flex;
+    background: var(--featured);
+    border-radius: 10px;
+    padding: 7px 14px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 12px;
+    color: var(--inverted-text);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .sentence-textarea {
+    border: none;
+    border-bottom: 1.5px solid var(--accent);
+    background: transparent;
+    width: 100%;
+    min-height: 88px;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px;
+    color: var(--text-primary);
+    line-height: 1.9;
+    padding: 6px 0 10px;
+    outline: none;
+    resize: none;
+  }
+
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 0;
+  }
+  .toggle-label {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+  .toggle-switch {
+    width: 44px;
+    height: 26px;
+    background: var(--inactive);
+    border-radius: 13px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .toggle-switch.on { background: var(--accent); }
+  .toggle-knob {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.15s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  }
+  .toggle-switch.on .toggle-knob { transform: translateX(18px); }
+
+  /* ─── Book dropdown ─── */
+  .book-dropdown {
+    background: var(--surface);
+    border: 1px solid var(--divider);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 2px;
+    box-shadow: 0 4px 16px rgba(46,40,36,0.08);
+  }
+  .book-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-bottom: 0.5px solid var(--divider);
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+  .book-dropdown-item:last-child { border-bottom: none; }
+  .book-dropdown-item:hover { background: rgba(168,107,82,0.06); }
+  .dropdown-thumb {
+    width: 28px;
+    height: 38px;
+    border-radius: 4px;
+    background: var(--skeleton-base);
+    flex-shrink: 0;
+  }
+  .dropdown-thumb-a { background: #C4B0A4; }
+  .dropdown-thumb-b { background: #B8A090; }
+  .dropdown-thumb-c { background: #CEC0B4; }
+  .dropdown-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .dropdown-author {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 11px;
+    color: var(--text-hint);
+    margin-top: 2px;
+  }
+
+  /* ─── Bottom sheet ─── */
+  .bottom-sheet-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(46,40,36,0.38);
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+  }
+  .bottom-sheet {
+    width: 100%;
+    background: var(--bg);
+    border-radius: 24px 24px 0 0;
+    padding: 14px 0 32px;
+    box-shadow: 0 -8px 32px rgba(46,40,36,0.12);
+  }
+  .sheet-handle {
+    width: 44px;
+    height: 4px;
+    background: var(--divider);
+    border-radius: 3px;
+    margin: 0 auto 18px;
+  }
+  .sheet-item {
+    padding: 15px 28px;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+  .sheet-item:hover { background: var(--surface); }
+  .sheet-item.danger { color: #C06050; }
+  .sheet-item-icon { font-size: 17px; width: 24px; text-align: center; }
+
+  /* ─── New sentences banner ─── */
+  .new-banner {
+    background: var(--accent);
+    padding: 8px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .new-banner-dot {
+    width: 5px;
+    height: 5px;
+    background: rgba(255,255,255,0.6);
+    border-radius: 50%;
+  }
+  .new-banner-text {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: white;
+    letter-spacing: 0.04em;
+  }
+
+  /* ─── Dialog ─── */
+  .dialog-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(46,40,36,0.44);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 28px;
+  }
+  .dialog {
+    background: var(--bg);
+    border-radius: 20px;
+    padding: 28px 24px 20px;
+    width: 100%;
+    box-shadow: 0 16px 48px rgba(46,40,36,0.2);
+  }
+  .dialog-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+  .dialog-body {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.75;
+    margin-bottom: 24px;
+  }
+  .dialog-actions { display: flex; gap: 10px; }
+  .dialog-btn {
+    flex: 1;
+    height: 46px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .dialog-btn.cancel { background: var(--surface); color: var(--text-secondary); }
+  .dialog-btn.confirm { background: var(--featured); color: var(--inverted-text); }
+
+  /* ─── Shimmer skeleton ─── */
+  @keyframes shimmer {
+    0%   { background-position: -400px 0; }
+    100% { background-position:  400px 0; }
+  }
+  .shimmer-block {
+    background: linear-gradient(90deg, #EDE8DF 25%, #F7F2ED 50%, #EDE8DF 75%);
+    background-size: 800px 100%;
+    animation: shimmer 1.6s infinite linear;
+    border-radius: 5px;
+  }
+  .skeleton-card {
+    padding: 24px 28px;
+    border-bottom: 1px solid var(--divider);
+  }
+  .sk-quote { width: 32px; height: 32px; margin-bottom: 14px; }
+  .sk-line   { height: 12px; margin-bottom: 8px; }
+  .sk-line-full { width: 100%; }
+  .sk-line-partial { width: 65%; }
+  .sk-meta { display: flex; justify-content: space-between; margin-top: 14px; }
+  .sk-meta-left  { width: 40%; height: 10px; }
+  .sk-meta-right { width: 20%; height: 10px; }
+</style>
+</head>
+<body>
+
+<h1 class="page-title">갈피 — 앱 목업</h1>
+
+<!-- ─── ROW 1: Login · My Bookmarks · Plaza ─── -->
+<div class="screens-row">
+
+  <!-- 1. Login -->
+  <div class="screen-wrap">
+    <div class="screen-label">로그인</div>
+    <div class="phone">
+      <div class="status-bar">
+        <span class="status-time">9:41</span>
+        <span class="status-icons">▲ ◆ ■</span>
+      </div>
+      <div class="login-screen">
+        <!-- Bookmark SVG icon -->
+        <div class="login-bookmark">
+          <svg width="48" height="52" viewBox="0 0 48 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 4C8 2.895 8.895 2 10 2H38C39.105 2 40 2.895 40 4V48L24 38L8 48V4Z"
+              stroke="#A86B52" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <path d="M16 14H32M16 22H26" stroke="#F2C4B4" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="login-appname">갈피</div>
+        <div class="login-appname-deco"></div>
+        <div class="login-tagline">오늘 읽은 문장을 기억하세요</div>
+        <div class="login-social-label">소셜 계정으로 시작하기</div>
+        <div class="kakao-btn">
+          <div class="kakao-logo">K</div>
+          <span class="kakao-text">카카오 계정으로 계속하기</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. My Bookmarks -->
+  <div class="screen-wrap">
+    <div class="screen-label">내 책갈피</div>
+    <div class="phone">
+      <div class="status-bar">
+        <span class="status-time">9:41</span>
+        <span class="status-icons">▲ ◆ ■</span>
+      </div>
+      <div class="screen-body">
+        <div class="appbar">
+          <div class="appbar-sub">내 책갈피</div>
+          <div class="appbar-title">김수현</div>
+        </div>
+        <div class="scroll-content">
+          <div class="section-count">
+            <span class="section-count-pill">문장 7개</span>
+          </div>
+
+          <!-- Featured card -->
+          <div class="sentence-card featured">
+            <div class="quote-deco dark">"</div>
+            <div class="card-text featured-text">살아있다는 것은 아직 완성되지 않았다는 것이다.</div>
+            <div class="card-meta">
+              <div>
+                <div class="card-book-title dark">채식주의자</div>
+                <div class="card-book-author dark">한강 지음</div>
+              </div>
+              <div class="card-like active">
+                <span class="heart-full"></span> 4
+              </div>
+            </div>
+          </div>
+
+          <div class="sentence-card">
+            <div class="quote-deco">"</div>
+            <div class="card-text">책은 도끼다. 우리 내면의 얼어붙은 바다를 깨는 도끼.</div>
+            <div class="card-meta">
+              <div>
+                <div class="card-book-title">변신 / 시골의사</div>
+                <div class="card-book-author">프란츠 카프카</div>
+              </div>
+              <div class="card-like">
+                <span class="heart-empty"></span> 2
+              </div>
+            </div>
+          </div>
+
+          <div class="sentence-card">
+            <div class="quote-deco">"</div>
+            <div class="card-text">모든 것은 지나간다. 그리고 이것도 지나갈 것이다.</div>
+            <div class="card-meta">
+              <div>
+                <div class="card-book-title">나는 나로 살기로 했다</div>
+                <div class="card-book-author">김수현</div>
+              </div>
+              <div class="card-like">
+                <span class="heart-empty"></span> 0
+              </div>
+            </div>
+          </div>
+
+          <!-- Shimmer -->
+          <div class="skeleton-card">
+            <div class="shimmer-block sk-quote"></div>
+            <div class="shimmer-block sk-line sk-line-full"></div>
+            <div class="shimmer-block sk-line sk-line-full"></div>
+            <div class="shimmer-block sk-line sk-line-partial"></div>
+            <div class="sk-meta">
+              <div class="shimmer-block sk-meta-left"></div>
+              <div class="shimmer-block sk-meta-right"></div>
+            </div>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item">
+            <span class="nav-icon active">📖</span>
+            <span class="nav-label active">내 책갈피</span>
+          </div>
+          <div class="nav-item">
+            <span class="nav-icon">👥</span>
+            <span class="nav-label">광장</span>
+          </div>
+        </div>
+        <div class="fab"><span class="fab-icon">✏️</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Plaza -->
+  <div class="screen-wrap">
+    <div class="screen-label">광장</div>
+    <div class="phone">
+      <div class="status-bar">
+        <span class="status-time">9:41</span>
+        <span class="status-icons">▲ ◆ ■</span>
+      </div>
+      <div class="screen-body">
+        <div class="appbar">
+          <div class="appbar-sub">광장</div>
+          <div class="appbar-title">오늘의 문장</div>
+        </div>
+        <div class="new-banner">
+          <div class="new-banner-dot"></div>
+          <span class="new-banner-text">새 문장 3개</span>
+          <div class="new-banner-dot"></div>
+        </div>
+        <div class="scroll-content">
+          <div class="sentence-card featured">
+            <div class="quote-deco dark">"</div>
+            <div class="card-text featured-text">가장 깊은 어둠 속에서도 별은 빛난다. 다만 우리가 올려다보지 않을 뿐이다.</div>
+            <div class="card-meta">
+              <div>
+                <div class="card-book-title dark">흰</div>
+                <div class="card-book-author dark">한강</div>
+              </div>
+              <div class="card-like active">
+                <span class="heart-full"></span> 12
+              </div>
+            </div>
+          </div>
+
+          <div class="sentence-card">
+            <div class="quote-deco">"</div>
+            <div class="card-text">우리는 모두 각자의 이야기를 살아가고 있다. 다른 사람의 이야기를 읽는 것은 나의 이야기를 더 깊이 이해하는 일이다.</div>
+            <div class="card-meta">
+              <div>
+                <div class="card-book-title">소년이 온다</div>
+                <div class="card-book-author">한강 · @reader_j</div>
+              </div>
+              <div class="card-like"><span class="heart-empty"></span> 7</div>
+            </div>
+          </div>
+
+          <div class="sentence-card">
+            <div class="quote-deco">"</div>
+            <div class="card-text">시간은 우리가 쓰는 방식으로만 존재한다.</div>
+            <div class="card-meta">
+              <div>
+                <div class="card-book-title">데미안</div>
+                <div class="card-book-author">헤르만 헤세 · @bookworm</div>
+              </div>
+              <div class="card-like"><span class="heart-empty"></span> 3</div>
+            </div>
+          </div>
+
+          <div class="sentence-card">
+            <div class="quote-deco">"</div>
+            <div class="card-text">길을 잃는 것은 길을 아는 방법이다.</div>
+            <div class="card-meta">
+              <div>
+                <div class="card-book-title">어린 왕자</div>
+                <div class="card-book-author">생텍쥐페리 · @jieun_r</div>
+              </div>
+              <div class="card-like"><span class="heart-empty"></span> 5</div>
+            </div>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item">
+            <span class="nav-icon">📖</span>
+            <span class="nav-label">내 책갈피</span>
+          </div>
+          <div class="nav-item">
+            <span class="nav-icon active">👥</span>
+            <span class="nav-label active">광장</span>
+          </div>
+        </div>
+        <div class="fab"><span class="fab-icon">✏️</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ─── ROW 2: Write screens + Bottom Sheet ─── -->
+<div class="screens-row">
+
+  <!-- 4. Write — book search dropdown -->
+  <div class="screen-wrap">
+    <div class="screen-label">글쓰기 — 책 검색</div>
+    <div class="phone">
+      <div class="status-bar">
+        <span class="status-time">9:41</span>
+        <span class="status-icons">▲ ◆ ■</span>
+      </div>
+      <div class="screen-body">
+        <div class="appbar">
+          <div class="appbar-row">
+            <span class="appbar-close">✕</span>
+            <div style="font-family:'Noto Serif KR',serif;font-size:16px;font-weight:700;color:var(--text-primary);">문장 추가</div>
+            <span class="appbar-action">저장</span>
+          </div>
+        </div>
+        <div class="scroll-content">
+          <div class="write-content">
+            <div>
+              <input class="input-field active-border" type="text" value="채식" placeholder="책 제목으로 검색">
+              <div class="book-dropdown" style="margin-top:6px;">
+                <div class="book-dropdown-item">
+                  <div class="book-thumbnail dropdown-thumb-a"></div>
+                  <div>
+                    <div class="dropdown-title">채식주의자</div>
+                    <div class="dropdown-author">한강</div>
+                  </div>
+                </div>
+                <div class="book-dropdown-item">
+                  <div class="book-thumbnail dropdown-thumb-b"></div>
+                  <div>
+                    <div class="dropdown-title">채식주의자의 부엌</div>
+                    <div class="dropdown-author">이선경</div>
+                  </div>
+                </div>
+                <div class="book-dropdown-item">
+                  <div class="book-thumbnail dropdown-thumb-c"></div>
+                  <div>
+                    <div class="dropdown-title">채식, 처음 시작할 때</div>
+                    <div class="dropdown-author">박지혜</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="camera-zone">
+              <span class="camera-icon">📷</span>
+              <span class="camera-hint">촬영해서 문장을 추출하세요</span>
+            </div>
+            <textarea class="sentence-textarea" placeholder="가져온 문장이 여기에 표시됩니다"></textarea>
+            <div class="toggle-row">
+              <span class="toggle-label">전체 공개</span>
+              <div class="toggle-switch"><div class="toggle-knob"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Write — OCR result + selection -->
+  <div class="screen-wrap">
+    <div class="screen-label">글쓰기 — OCR 결과</div>
+    <div class="phone">
+      <div class="status-bar">
+        <span class="status-time">9:41</span>
+        <span class="status-icons">▲ ◆ ■</span>
+      </div>
+      <div class="screen-body">
+        <div class="appbar">
+          <div class="appbar-row">
+            <span class="appbar-close">✕</span>
+            <div style="font-family:'Noto Serif KR',serif;font-size:16px;font-weight:700;color:var(--text-primary);">문장 추가</div>
+            <span class="appbar-action">저장</span>
+          </div>
+        </div>
+        <div class="scroll-content">
+          <div class="write-content">
+            <div class="book-selected-row" style="border-bottom:1px solid var(--divider);padding-bottom:14px;">
+              <div class="book-thumbnail" style="background:#C4B0A4;"></div>
+              <div>
+                <div class="book-title-mini">채식주의자</div>
+                <div class="book-author-mini">한강</div>
+              </div>
+            </div>
+            <div class="camera-zone" style="background:var(--surface);border-style:solid;border-color:var(--divider);">
+              <span style="font-size:12px;color:var(--text-hint);font-family:'Noto Serif KR',serif;font-style:italic;">재촬영</span>
+            </div>
+            <div class="ocr-zone">
+              <div class="ocr-label">추출된 텍스트 · 원하는 문장을 드래그하세요</div>
+              <div class="ocr-text">그녀는 창문을 열었다. 차가운 공기가 밀려들었다. <span class="ocr-selected">살아있다는 것은 아직 완성되지 않았다는 것이다.</span> 그것이 두렵기도 하고 아름답기도 하다고 생각했다.</div>
+              <div class="ocr-toolbar">이 문장 가져오기</div>
+            </div>
+            <textarea class="sentence-textarea">살아있다는 것은 아직 완성되지 않았다는 것이다.</textarea>
+            <div class="toggle-row">
+              <span class="toggle-label">전체 공개</span>
+              <div class="toggle-switch on"><div class="toggle-knob"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. Bottom sheet (long press) -->
+  <div class="screen-wrap">
+    <div class="screen-label">카드 롱프레스 메뉴</div>
+    <div class="phone">
+      <div class="status-bar">
+        <span class="status-time">9:41</span>
+        <span class="status-icons">▲ ◆ ■</span>
+      </div>
+      <div class="screen-body" style="position:relative;">
+        <div class="appbar">
+          <div class="appbar-sub">내 책갈피</div>
+          <div class="appbar-title">김수현</div>
+        </div>
+        <div class="scroll-content" style="filter:blur(1.5px);opacity:0.45;">
+          <div class="sentence-card featured">
+            <div class="quote-deco dark">"</div>
+            <div class="card-text featured-text">살아있다는 것은 아직 완성되지 않았다는 것이다.</div>
+          </div>
+          <div class="sentence-card">
+            <div class="quote-deco">"</div>
+            <div class="card-text">책은 도끼다.</div>
+          </div>
+        </div>
+        <div class="bottom-sheet-overlay">
+          <div class="bottom-sheet">
+            <div class="sheet-handle"></div>
+            <div class="sheet-item"><span class="sheet-item-icon">✏️</span>편집</div>
+            <div class="sheet-item"><span class="sheet-item-icon">🔓</span>전체 공개로 전환</div>
+            <div class="sheet-item danger"><span class="sheet-item-icon">🗑</span>삭제</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ─── ROW 3: Empty · Delete confirm · Network error ─── -->
+<div class="screens-row">
+
+  <!-- 7. Empty bookmarks -->
+  <div class="screen-wrap">
+    <div class="screen-label">내 책갈피 — 빈 상태</div>
+    <div class="phone">
+      <div class="status-bar">
+        <span class="status-time">9:41</span>
+        <span class="status-icons">▲ ◆ ■</span>
+      </div>
+      <div class="screen-body">
+        <div class="appbar">
+          <div class="appbar-sub">내 책갈피</div>
+          <div class="appbar-title">김수현</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 28px;gap:10px;">
+          <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:8px;">
+            <path d="M12 8C12 6.895 12.895 6 14 6H42C43.105 6 44 6.895 44 8V50L28 40L12 50V8Z"
+              stroke="#CEC1B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <path d="M20 18H36M20 26H30" stroke="#DDD6CE" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <div style="font-family:'Noto Serif KR',serif;font-size:15px;color:var(--text-secondary);">아직 저장된 문장이 없어요</div>
+          <div style="font-family:'Noto Serif KR',serif;font-size:13px;font-style:italic;color:var(--text-hint);text-align:center;line-height:1.8;">카메라 버튼을 눌러<br>첫 문장을 남겨보세요</div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item">
+            <span class="nav-icon active">📖</span>
+            <span class="nav-label active">내 책갈피</span>
+          </div>
+          <div class="nav-item">
+            <span class="nav-icon">👥</span>
+            <span class="nav-label">광장</span>
+          </div>
+        </div>
+        <div class="fab"><span class="fab-icon">✏️</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. Delete confirm -->
+  <div class="screen-wrap">
+    <div class="screen-label">삭제 확인 다이얼로그</div>
+    <div class="phone">
+      <div class="status-bar">
+        <span class="status-time">9:41</span>
+        <span class="status-icons">▲ ◆ ■</span>
+      </div>
+      <div class="screen-body" style="position:relative;">
+        <div class="appbar">
+          <div class="appbar-sub">내 책갈피</div>
+          <div class="appbar-title">김수현</div>
+        </div>
+        <div class="scroll-content" style="filter:blur(2px);opacity:0.4;">
+          <div class="sentence-card featured">
+            <div class="quote-deco dark">"</div>
+            <div class="card-text featured-text">살아있다는 것은 아직 완성되지 않았다는 것이다.</div>
+          </div>
+        </div>
+        <div class="dialog-overlay">
+          <div class="dialog">
+            <div class="dialog-title">문장을 삭제할까요?</div>
+            <div class="dialog-body">삭제된 문장은 복구할 수 없어요.<br>광장에 공유된 경우도 함께 삭제됩니다.</div>
+            <div class="dialog-actions">
+              <div class="dialog-btn cancel">취소</div>
+              <div class="dialog-btn confirm">삭제</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. Network error -->
+  <div class="screen-wrap">
+    <div class="screen-label">광장 — 네트워크 오류</div>
+    <div class="phone">
+      <div class="status-bar">
+        <span class="status-time">9:41</span>
+        <span class="status-icons">▲ ◆ ■</span>
+      </div>
+      <div class="screen-body">
+        <div class="appbar">
+          <div class="appbar-sub">광장</div>
+          <div class="appbar-title">오늘의 문장</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 28px;gap:8px;">
+          <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:8px;">
+            <path d="M6 16C10.4 11.6 16.4 9 22 9C27.6 9 33.6 11.6 38 16" stroke="#CEC1B8" stroke-width="2" stroke-linecap="round"/>
+            <path d="M11 21C14.2 17.8 18 16 22 16C26 16 29.8 17.8 33 21" stroke="#CEC1B8" stroke-width="2" stroke-linecap="round"/>
+            <path d="M16 26C18 24 20 23 22 23C24 23 26 24 28 26" stroke="#CEC1B8" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="22" cy="32" r="2" fill="#CEC1B8"/>
+            <path d="M8 38L36 6" stroke="#E8DDD6" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <div style="font-family:'Noto Serif KR',serif;font-size:15px;color:var(--text-secondary);">연결을 확인해주세요</div>
+          <div style="font-family:'Noto Serif KR',serif;font-size:12px;font-style:italic;color:var(--text-hint);text-align:center;line-height:1.8;">저장된 문장은<br>내 책갈피에서 볼 수 있어요</div>
+          <div style="margin-top:14px;font-family:'Noto Serif KR',serif;font-size:14px;font-weight:600;color:var(--accent);">다시 시도</div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item">
+            <span class="nav-icon">📖</span>
+            <span class="nav-label">내 책갈피</span>
+          </div>
+          <div class="nav-item">
+            <span class="nav-icon active">👥</span>
+            <span class="nav-label active">광장</span>
+          </div>
+        </div>
+        <div class="fab"><span class="fab-icon">✏️</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
